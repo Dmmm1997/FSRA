@@ -13,6 +13,7 @@ This repository contains the dataset link and the code for our paper [A Transfor
 
 ## Train and Test
 We provide scripts to complete FSRA training and testing
+* Change the **data_dir** and **test_dir** paths in **train_test_local.sh** and then run:
 ```shell
 bash train_test_local.sh
 ```
