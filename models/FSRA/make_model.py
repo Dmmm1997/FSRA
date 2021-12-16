@@ -92,7 +92,7 @@ class build_transformer(nn.Module):
         model_path = "pretrain_model/vit_small_p16_224-15ec54c9.pth"
         pretrain_choice = "imagenet"
         # small
-        transformer_name = "vit_small_patch16_224_TransReID"
+        transformer_name = "vit_small_patch16_224_FSRA"
         self.in_planes = 768
 
         print('using Transformer_type: {} as a backbone'.format(transformer_name))
