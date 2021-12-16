@@ -10,6 +10,12 @@ This repository contains the dataset link and the code for our paper [A Transfor
      pip install -r requirement.txt
      ```
 
+## Download pre-training weights
+You can download the pre-training weight from the following link and put them in the **pretrain_model** folder
+
+1. [Baidu Driver](https://pan.baidu.com/s/1ci2rNHb4ARKCwyVemT_JNg)  code: 52n2
+
+2. [Google Driver](https://drive.google.com/file/d/1gEfXVVdL827J5SJ4KGOHhdWoeDZ7UjTd/view?usp=sharing)
 
 ## Train and Test
 We provide scripts to complete FSRA training and testing
