@@ -27,6 +27,7 @@ class three_view_net(nn.Module):
         self.share_weight = share_weight
         self.model_1 = make_transformer_model(num_class=class_num, block=block, return_f=return_f)
 
+
         if self.share_weight:
             self.model_2 = self.model_1
         else:
@@ -58,10 +59,18 @@ class three_view_net(nn.Module):
 
 
 def make_model(opt):
+    model_path = "pretrain_model/vit_small_p16_224-15ec54c9.pth"
     if opt.views == 2:
         model = two_view_net(opt.nclasses, block=opt.block,return_f=opt.triplet_loss)
+        # load pretrain param
+        model.model_1.transformer.load_param(model_path)
+
     elif opt.views == 3:
         model = three_view_net(opt.nclasses, share_weight=opt.share,block=opt.block,return_f=opt.triplet_loss)
+
+        # load pretrain param
+        model.model_1.transformer.load_param(model_path)
+        model.model_2.transformer.load_param(model_path)
 
     return model
 

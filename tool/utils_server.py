@@ -94,8 +94,6 @@ class UnNormalize(object):
 
 
 def check_box(images,boxes):
-    # Unorm = UnNormalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    # images = Unorm(images)*255
     images = images.permute(0,2,3,1).cpu().detach().numpy()
     boxes = (boxes.cpu().detach().numpy()/16*255).astype(np.int)
     for img,box in zip(images,boxes):
@@ -109,30 +107,14 @@ def check_box(images,boxes):
 
 
 ######################################################################
-#  Load model for resume
-#---------------------------
 def load_network(opt):
-    # module = importlib.import_module("checkpoints."+name+".model")
-
-    # Load config
-    # dirname = os.path.join('./checkpoints',name)
-    # last_model_name = os.path.basename(get_model_list(dirname, 'net'))
     save_filename = opt.checkpoint
 
     if opt.views == 2:
-        # model = getattr(module, "two_view_net")(opt.nclasses, opt.droprate, stride = opt.stride, pool = opt.pool, share_weight = opt.share,Transformer=opt.transformer,LPN=opt.LPN,block=opt.block)
         model = two_view_net(opt.nclasses, block=opt.block)
     elif opt.views == 3:
         model = three_view_net(opt.nclasses, opt.droprate, block=opt.block)
 
-    # if 'use_vgg16' in config:
-    #     opt.use_vgg16 = config['use_vgg16']
-    #     if opt.views == 2:
-    #         model = two_view_net(opt.nclasses, opt.droprate, stride = opt.stride, pool = opt.pool, share_weight = opt.share, VGG16 = opt.use_vgg16)
-    #     elif opt.views == 3:
-    #         model = three_view_net(opt.nclasses, opt.droprate, stride = opt.stride, pool = opt.pool, share_weight = opt.share, VGG16 = opt.use_vgg16)
-
-    # save_path = os.path.join('./checkpoints',name,save_filename)
     print('Load the model from %s'%save_filename)
     model.load_state_dict(torch.load(save_filename))
     return model

@@ -88,9 +88,7 @@ class build_transformer(nn.Module):
     def __init__(self, num_classes, camera_num=0,block = 4 ,return_f=False):
         super(build_transformer, self).__init__()
         self.return_f = return_f
-        # small
-        model_path = "pretrain_model/vit_small_p16_224-15ec54c9.pth"
-        pretrain_choice = "imagenet"
+
         # small
         transformer_name = "vit_small_patch16_224_FSRA"
         self.in_planes = 768
@@ -99,11 +97,6 @@ class build_transformer(nn.Module):
 
         self.transformer = vit_small_patch16_224_FSRA(img_size=(256,256), stride_size=[16, 16], drop_path_rate=0.1,
                                                         drop_rate= 0.0, attn_drop_rate=0.0)
-
-
-        if pretrain_choice == 'imagenet':
-            self.transformer.load_param(model_path)
-            print('Loading pretrained ImageNet model......from {}'.format(model_path))
 
         self.num_classes = num_classes
 
