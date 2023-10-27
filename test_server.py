@@ -45,7 +45,7 @@ opt = parser.parse_args()
 # load the training config
 config_path = 'opts.yaml'
 with open(config_path, 'r') as stream:
-    config = yaml.load(stream)
+    config = yaml.safe_load(stream)
 opt.views = config['views']
 opt.block = config['block']
 opt.share = config['share']
