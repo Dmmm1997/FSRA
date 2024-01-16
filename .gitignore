@@ -1,0 +1,3 @@
+checkpoints/*
+pretrain_model/*
+*.pyc

@@ -49,6 +49,8 @@ with open(config_path, 'r') as stream:
 opt.views = config['views']
 opt.block = config['block']
 opt.share = config['share']
+opt.backbone = config["backbone"]
+opt.pretrain_path = config["pretrain_path"]
 
 if 'h' in config:
     opt.h = config['h']

@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from .backbones.vit_pytorch import vit_small_patch16_224_FSRA
 import torch.nn.functional as F
-
+from .backbones.van import van_small
 
 
 class Gem_heat(nn.Module):
@@ -85,31 +85,41 @@ def weights_init_classifier(m):
 
 
 class build_transformer(nn.Module):
-    def __init__(self, num_classes, camera_num=0,block = 4 ,return_f=False):
+    def __init__(self, opt,num_classes,block = 4 ,return_f=False):
         super(build_transformer, self).__init__()
         self.return_f = return_f
 
-        # small
-        transformer_name = "vit_small_patch16_224_FSRA"
-        self.in_planes = 768
+        if opt.backbone == "VIT-S":
+            model_path = opt.pretrain_path
+            # small
+            transformer_name = "vit_small_patch16_224_FSRA"
+            self.in_planes = 768
 
-        print('using Transformer_type: {} as a backbone'.format(transformer_name))
+            print('using Transformer_type: {} as a backbone'.format(transformer_name))
 
-        self.transformer = vit_small_patch16_224_FSRA(img_size=(256,256), stride_size=[16, 16], drop_path_rate=0.1,
-                                                        drop_rate= 0.0, attn_drop_rate=0.0)
+            self.transformer = vit_small_patch16_224_FSRA(img_size=(256,256), stride_size=[16, 16], drop_path_rate=0.1,
+                                                            drop_rate= 0.0, attn_drop_rate=0.0)
+            self.transformer.load_param(model_path)
+        elif opt.backbone=="VAN-S":
+            self.transformer = van_small()
+            checkpoint = torch.load(opt.pretrain_path)["state_dict"]
+            self.transformer.load_state_dict(checkpoint)
 
         self.num_classes = num_classes
 
-        self.classifier1 = ClassBlock(768,num_classes,0.5,return_f=return_f)
+        # self.classifier1 = ClassBlock(768,num_classes,0.5,return_f=return_f)
+        self.classifier1 = ClassBlock(self.in_planes,num_classes,0.5,return_f=return_f)
         self.block = block
         for i in range(self.block):
             name = 'classifier_heat' + str(i+1)
-            setattr(self, name, ClassBlock(768, num_classes, 0.5, return_f=self.return_f))
+            setattr(self, name, ClassBlock(self.in_planes, num_classes, 0.5, return_f=self.return_f))
 
 
     def forward(self, x):
-        features,all_features = self.transformer(x)
+        features = self.transformer(x)
         tranformer_feature = self.classifier1(features[:,0])
+        # tranformer_feature = torch.mean(features,dim=1)
+        # tranformer_feature = self.classifier1(tranformer_feature)
         if self.block==1:
             return tranformer_feature
 
@@ -188,7 +198,7 @@ class build_transformer(nn.Module):
 
 
 
-def make_transformer_model(num_class,block = 4,return_f=False):
+def make_transformer_model(opt, num_class,block = 4,return_f=False):
     print('===========building transformer===========')
-    model = build_transformer(num_class,block=block,return_f=return_f)
+    model = build_transformer(opt, num_class,block=block,return_f=return_f)
     return model

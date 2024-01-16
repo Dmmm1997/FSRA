@@ -366,14 +366,12 @@ class FSRA(nn.Module):
             return x
 
         else:
-            x_all = []
             for blk in self.blocks:
                 x = blk(x)
-                x_all.append(x)
 
             x = self.norm(x)
 
-            return x,x_all
+            return x
 
     def forward(self, x):
         x = self.forward_features(x)
