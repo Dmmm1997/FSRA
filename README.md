@@ -13,7 +13,7 @@ This repository contains the dataset link and the code for our paper [A Transfor
 ## Download pre-training weights
 You can download the pre-training weight from the following link and put them in the **pretrain_model** folder
 
-1. [Baidu Driver](https://pan.baidu.com/s/1O3vgSOrWW2-ZKVEU8LuIIA)  code: p8w2
+1. [Baidu Driver](https://pan.baidu.com/s/1znsBPytTo9_W5ZxGa1Dvow)  code: 0000
 
 2. [Google Driver](https://drive.google.com/file/d/1-Rp-VAlUdb_dRbquyWhD6pdkhXYrwu-w/view?usp=drive_link)
 
